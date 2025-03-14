@@ -205,6 +205,166 @@
       justify-content: flex-end;
       margin-bottom: 1rem;
     }
+
+    /* Timer styles */
+    .timer-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .timer-display {
+      font-size: 2.5rem;
+      font-family: monospace;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .timer-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .timer-button:hover {
+      opacity: 0.9;
+    }
+
+    .timer-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .timer-button svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-right: 0.5rem;
+    }
+
+    .timer-presets {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .timer-preset {
+      padding: 0.5rem 1rem;
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .timer-preset:hover {
+      background-color: var(--accent);
+    }
+
+    .timer-preset.active {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+
+    .custom-timer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .custom-timer input {
+      width: 4rem;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background-color: var(--input);
+      color: var(--foreground);
+      text-align: center;
+    }
+
+    .custom-timer button {
+      padding: 0.5rem 1rem;
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .custom-timer button:hover {
+      background-color: var(--accent);
+    }
+
+    .timer-alert {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .timer-alert.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .timer-alert-content {
+      background-color: var(--card);
+      color: var(--card-foreground);
+      padding: 2rem;
+      border-radius: var(--radius);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .timer-alert h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .timer-alert button {
+      padding: 0.5rem 1rem;
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 1rem;
+    }
+
+    .timer-alert button:hover {
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -228,6 +388,50 @@
       </button>
     </div>
     
+    <!-- Timer Card -->
+    <div class="card timer-container">
+      <div class="timer-display" id="timer-display">05:00</div>
+      
+      <div class="timer-controls">
+        <button id="start-timer-btn" class="timer-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Start
+        </button>
+        <button id="pause-timer-btn" class="timer-button" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+          Pause
+        </button>
+        <button id="reset-timer-btn" class="timer-button" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6"></path>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          Reset
+        </button>
+      </div>
+      
+      <div class="timer-presets">
+        <button class="timer-preset active" data-time="300">5 min</button>
+        <button class="timer-preset" data-time="600">10 min</button>
+        <button class="timer-preset" data-time="900">15 min</button>
+        <button class="timer-preset" data-time="1800">30 min</button>
+      </div>
+      
+      <div class="custom-timer">
+        <input type="number" id="custom-minutes" min="1" max="60" value="5" aria-label="Custom minutes">
+        <span>min</span>
+        <input type="number" id="custom-seconds" min="0" max="59" value="0" aria-label="Custom seconds">
+        <span>sec</span>
+        <button id="set-custom-time-btn">Set</button>
+      </div>
+    </div>
+    
+    <!-- Pi Practice Card -->
     <div class="card">
       <div class="input-container">
         <span class="pi-prefix">3.</span>
@@ -264,6 +468,16 @@
     </div>
   </div>
 
+  <!-- Timer Alert -->
+  <div id="timer-alert" class="timer-alert">
+    <div class="timer-alert-content">
+      <h2>Time's Up!</h2>
+      <p>Your practice session has ended.</p>
+      <p id="timer-results">You completed 0 digits in this session.</p>
+      <button id="close-alert-btn">Close</button>
+    </div>
+  </div>
+
   <script>
     // First 150 digits of Pi after the decimal point
     const piDigits = "1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989";
@@ -279,12 +493,31 @@
     const errorMessage = document.getElementById('error-message');
     const successMessage = document.getElementById('success-message');
     
+    // Timer Elements
+    const timerDisplay = document.getElementById('timer-display');
+    const startTimerBtn = document.getElementById('start-timer-btn');
+    const pauseTimerBtn = document.getElementById('pause-timer-btn');
+    const resetTimerBtn = document.getElementById('reset-timer-btn');
+    const timerPresets = document.querySelectorAll('.timer-preset');
+    const customMinutes = document.getElementById('custom-minutes');
+    const customSeconds = document.getElementById('custom-seconds');
+    const setCustomTimeBtn = document.getElementById('set-custom-time-btn');
+    const timerAlert = document.getElementById('timer-alert');
+    const timerResults = document.getElementById('timer-results');
+    const closeAlertBtn = document.getElementById('close-alert-btn');
+    
     // State
     let isDarkMode = true;
+    let timerSeconds = 300; // Default 5 minutes
+    let remainingSeconds = timerSeconds;
+    let timerInterval = null;
+    let isTimerRunning = false;
+    let correctDigitsCount = 0;
     
     // Focus input on load
     window.addEventListener('load', () => {
       piInput.focus();
+      updateTimerDisplay();
     });
     
     // Input validation
@@ -304,6 +537,8 @@
         }
       }
       
+      correctDigitsCount = correctCount;
+      
       // Update UI based on validation
       if (isCorrect) {
         piInput.classList.remove('incorrect');
@@ -319,6 +554,9 @@
         // Show success message if all digits are correct
         if (correctCount >= 150) {
           successMessage.style.display = 'block';
+          if (isTimerRunning) {
+            pauseTimer();
+          }
         } else {
           successMessage.style.display = 'none';
         }
@@ -339,6 +577,7 @@
       progressText.textContent = 'Progress: 0/150 digits';
       progressPercentage.textContent = '0.0%';
       progressValue.style.width = '0%';
+      correctDigitsCount = 0;
       piInput.focus();
     });
     
@@ -365,6 +604,114 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         `;
       }
+    });
+    
+    // Timer Functions
+    function updateTimerDisplay() {
+      const minutes = Math.floor(remainingSeconds / 60);
+      const seconds = remainingSeconds % 60;
+      timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    function startTimer() {
+      if (!isTimerRunning) {
+        isTimerRunning = true;
+        startTimerBtn.disabled = true;
+        pauseTimerBtn.disabled = false;
+        resetTimerBtn.disabled = false;
+        
+        timerInterval = setInterval(() => {
+          remainingSeconds--;
+          updateTimerDisplay();
+          
+          if (remainingSeconds <= 0) {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            showTimerAlert();
+            startTimerBtn.disabled = false;
+            pauseTimerBtn.disabled = true;
+          }
+        }, 1000);
+      }
+    }
+    
+    function pauseTimer() {
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        startTimerBtn.disabled = false;
+        pauseTimerBtn.disabled = true;
+      }
+    }
+    
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      remainingSeconds = timerSeconds;
+      updateTimerDisplay();
+      startTimerBtn.disabled = false;
+      pauseTimerBtn.disabled = true;
+      resetTimerBtn.disabled = true;
+    }
+    
+    function showTimerAlert() {
+      timerResults.textContent = `You completed ${correctDigitsCount} digits in this session.`;
+      timerAlert.classList.add('active');
+    }
+    
+    // Timer Event Listeners
+    startTimerBtn.addEventListener('click', startTimer);
+    pauseTimerBtn.addEventListener('click', pauseTimer);
+    resetTimerBtn.addEventListener('click', resetTimer);
+    
+    // Timer Presets
+    timerPresets.forEach(preset => {
+      preset.addEventListener('click', () => {
+        // Remove active class from all presets
+        timerPresets.forEach(p => p.classList.remove('active'));
+        
+        // Add active class to clicked preset
+        preset.classList.add('active');
+        
+        // Set timer seconds
+        timerSeconds = parseInt(preset.dataset.time);
+        remainingSeconds = timerSeconds;
+        updateTimerDisplay();
+        
+        // Reset timer if running
+        if (isTimerRunning) {
+          resetTimer();
+        }
+      });
+    });
+    
+    // Custom Timer
+    setCustomTimeBtn.addEventListener('click', () => {
+      const minutes = parseInt(customMinutes.value) || 0;
+      const seconds = parseInt(customSeconds.value) || 0;
+      
+      if (minutes === 0 && seconds === 0) {
+        return; // Don't allow 0 time
+      }
+      
+      // Remove active class from all presets
+      timerPresets.forEach(p => p.classList.remove('active'));
+      
+      // Set timer seconds
+      timerSeconds = (minutes * 60) + seconds;
+      remainingSeconds = timerSeconds;
+      updateTimerDisplay();
+      
+      // Reset timer if running
+      if (isTimerRunning) {
+        resetTimer();
+      }
+    });
+    
+    // Close Timer Alert
+    closeAlertBtn.addEventListener('click', () => {
+      timerAlert.classList.remove('active');
+      resetTimer();
     });
     
     // Initialize theme icon
